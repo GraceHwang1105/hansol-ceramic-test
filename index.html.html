@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나에게 딱 맞는 세라믹은? | 한솔홈데코</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F5F2;
+    --surface: #FFFFFF;
+    --text-primary: #1A1A18;
+    --text-secondary: #6B6B67;
+    --text-muted: #9E9E9A;
+    --accent: #C8A96E;
+    --accent-light: #E8D9BC;
+    --accent-dark: #8B6914;
+    --border: #E2DDD6;
+    --shadow: rgba(26,26,24,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ── INTRO ── */
+  #screen-intro {
+    background: var(--text-primary);
+    color: #F7F5F2;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #screen-intro::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(200,169,110,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(200,169,110,0.08) 0%, transparent 50%);
+  }
+
+  .intro-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    padding: 60px 40px;
+    text-align: center;
+  }
+
+  .intro-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .intro-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 300;
+    line-height: 1.6;
+    color: #F7F5F2;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .intro-title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .intro-body {
+    font-size: 15px;
+    line-height: 2.0;
+    color: #C8C8C4;
+    font-weight: 300;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .intro-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    margin: 32px auto;
+  }
+
+  .btn-start {
+    display: inline-block;
+    padding: 16px 48px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-start:hover {
+    background: var(--accent);
+    color: var(--text-primary);
+  }
+
+  /* ── QUESTION SCREEN ── */
+  #screen-question {
+    background: var(--bg);
+    padding: 0;
+  }
+
+  .question-header {
+    background: var(--text-primary);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .q-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .progress-bar {
+    width: 120px;
+    height: 2px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.5s ease;
+  }
+
+  .progress-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .question-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .q-step-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .q-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 300;
+    text-align: center;
+    line-height: 1.7;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+  }
+
+  .q-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+
+  .options-grid {
+    display: grid;
+    gap: 16px;
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .options-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .options-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .options-grid.cols-single { grid-template-columns: 1fr; max-width: 480px; }
+
+  .option-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 24px 20px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+
+  .option-card:hover::before { width: 100%; }
+
+  .option-card:hover {
+    border-color: var(--accent-light);
+    box-shadow: 0 4px 20px var(--shadow);
+    transform: translateY(-2px);
+  }
+
+  .option-card.selected {
+    border-color: var(--accent);
+    background: #FDFAF5;
+  }
+
+  .option-card.selected::before { width: 100%; }
+
+  .option-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .option-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .option-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .option-image {
+    width: 100%;
+    aspect-ratio: 3/2;
+    object-fit: cover;
+    margin-bottom: 16px;
+    background: var(--border);
+    display: block;
+  }
+
+  .option-image-placeholder {
+    width: 100%;
+    aspect-ratio: 3/2;
+    background: linear-gradient(135deg, var(--border) 0%, var(--accent-light) 100%);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .btn-next {
+    margin-top: 40px;
+    padding: 14px 48px;
+    background: var(--text-primary);
+    color: #F7F5F2;
+    border: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .btn-next.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .btn-next:hover { background: var(--accent-dark); }
+
+  /* ── LOADING ── */
+  #screen-loading {
+    background: var(--text-primary);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .loading-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #F7F5F2;
+    letter-spacing: 2px;
+    animation: pulse 1.5s infinite;
+  }
+
+  .loading-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .loading-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: dotBounce 1.2s infinite;
+  }
+
+  .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  /* ── RESULT ── */
+  #screen-result {
+    background: var(--bg);
+    align-items: center;
+  }
+
+  .result-header {
+    background: var(--text-primary);
+    width: 100%;
+    padding: 28px 40px;
+    text-align: center;
+  }
+
+  .result-header-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .result-body {
+    max-width: 760px;
+    width: 100%;
+    padding: 60px 24px 80px;
+    margin: 0 auto;
+  }
+
+  .result-type-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border: 1px solid var(--accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .result-tone-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+
+  .result-tone-desc {
+    font-size: 15px;
+    line-height: 2.0;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .result-ceramic-section {
+    margin-bottom: 48px;
+  }
+
+  .result-section-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .result-ceramic-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 400;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+  }
+
+  .result-ceramic-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .result-ceramic-line {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+  }
+
+  .result-ceramic-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    margin-bottom: 32px;
+    background: var(--border);
+    display: block;
+  }
+
+  .result-ceramic-image-placeholder {
+    width: 100%;
+    height: 320px;
+    background: linear-gradient(135deg, #E8E4DC 0%, #D4CFC5 50%, #C8C0B0 100%);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .result-ceramic-image-placeholder span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+  }
+
+  .result-desc {
+    font-size: 15px;
+    line-height: 2.1;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  .result-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 48px;
+  }
+
+  .result-tag {
+    padding: 6px 16px;
+    background: var(--accent-light);
+    font-size: 12px;
+    color: var(--accent-dark);
+    letter-spacing: 1px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .result-selection-summary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+
+  .summary-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .summary-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .summary-item {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .summary-item strong {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+
+  .btn-retry {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    padding: 16px;
+    background: transparent;
+    border: 1px solid var(--text-primary);
+    color: var(--text-primary);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+  }
+
+  .btn-retry:hover {
+    background: var(--text-primary);
+    color: #F7F5F2;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @keyframes dotBounce {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+    40% { transform: scale(1.2); opacity: 1; }
+  }
+
+  .fade-in {
+    animation: fadeUp 0.6s forwards;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .options-grid.cols-3 { grid-template-columns: 1fr; }
+    .options-grid.cols-2 { grid-template-columns: 1fr; }
+    .summary-items { grid-template-columns: 1fr; }
+    .question-header { padding: 16px 20px; }
+    .question-body { padding: 40px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ INTRO ══ -->
+<div id="screen-intro" class="screen active">
+  <div class="intro-inner">
+    <div class="intro-label">Hansol Homedeco × Collect Stone</div>
+    <div class="intro-title">
+      당신에게 딱 맞는<br><em>세라믹</em>을 찾아드립니다
+    </div>
+    <div class="intro-divider"></div>
+    <div class="intro-body">
+      태어나서 처음으로 내 집이 생겼어요.<br>
+      예산도 마련했고, 이제 진짜 <strong style="color:#F7F5F2;font-weight:400;">내가 꿈꾸던 공간</strong>을 만들 차례예요.<br><br>
+      설레는 마음으로 찾아온 <strong style="color:var(--accent);font-weight:400;">한솔홈데코 쇼룸</strong>.<br>
+      바닥재, 벽장재, 가구재, 필름재까지—<br>
+      수많은 소재들 사이를 거닐다 보면<br>
+      어느 순간 시선이 멈추는 곳이 생겨요.<br><br>
+      <em style="color:var(--accent);">세라믹 앞에서.</em><br><br>
+      공간의 첫인상을 결정짓는 소재.<br>
+      오래 봐도 질리지 않아야 하는 소재.<br>
+      결국 그 공간을 <strong style="color:#F7F5F2;font-weight:400;">나답게</strong> 만들어주는 소재.<br><br>
+      지금부터 당신의 취향을 따라가다 보면,<br>
+      당신에게 꼭 맞는 세라믹을 찾을 수 있을 거예요. 🤍
+    </div>
+    <button class="btn-start" onclick="startTest()">자, 시작해볼까요?</button>
+  </div>
+</div>
+
+<!-- ══ QUESTION ══ -->
+<div id="screen-question" class="screen">
+  <div class="question-header">
+    <div class="q-brand">Hansol Homedeco</div>
+    <div class="progress-wrap">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-text" id="progress-text">1 / 4</div>
+    </div>
+  </div>
+  <div class="question-body" id="question-body"></div>
+</div>
+
+<!-- ══ LOADING ══ -->
+<div id="screen-loading" class="screen">
+  <div class="loading-text">취향을 분석하는 중</div>
+  <div class="loading-dots">
+    <div class="loading-dot"></div>
+    <div class="loading-dot"></div>
+    <div class="loading-dot"></div>
+  </div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="screen-result" class="screen">
+  <div class="result-header">
+    <div class="result-header-label">Hansol Homedeco × Collect Stone — Your Ceramic</div>
+  </div>
+  <div class="result-body" id="result-body"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+
+// 구글 드라이브 이미지 URL 변환 함수
+function gdrive(id) {
+  return `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+}
+
+const QUESTIONS = [
+  {
+    id: 'floor',
+    step: 'Step 01',
+    title: '쇼룸에 들어서자마자 발아래를 먼저 확인했어요.\n어떤 바닥재에 시선이 멈췄나요?',
+    sub: '바닥재를 선택해주세요',
+    gridClass: 'cols-3',
+    options: [
+      { key: 'A', letter: 'A', name: '스킨플로어\n조슈아라이트', desc: '따뜻하고 리얼한 우드 디자인이 돋보이는', image: gdrive('1qGJYsaymEAxDVxKQxIO3tnYnJkz6wK1u') },
+      { key: 'B', letter: 'B', name: '스퀘어800\n마테라베이지', desc: '이건 진짜 타일인가 싶은 초광폭 타일형 강마루', image: gdrive('1gn120Jh1bJsw6HkbTRsl62IzNKJvEZsL') },
+      { key: 'C', letter: 'C', name: '스톤395\n무이네라이트', desc: '확실하게 화이트한 공간이 좋아!', image: gdrive('1eUeuPr-TtLa6Xz1nfwh6SKwHvnTQLWCJ') },
+    ]
+  },
+  {
+    id: 'furniture',
+    step: 'Step 02',
+    title: '이번엔 가구재 코너예요.\n어떤 컬러의 가구재가 마음에 드셨나요?',
+    sub: '가구재를 선택해주세요',
+    gridClass: 'cols-3',
+    options: [
+      { key: 'A', letter: 'A', name: '포그그레이', desc: '국민조합은 못참지', image: gdrive('12vpCcMNwWzcFgmnpETjWr-LK31P7Y0Bo') },
+      { key: 'B', letter: 'B', name: '크림화이트', desc: '깔끔한게 최고야', image: gdrive('1k6OExvPBwfP_tOwlGNmVltwJimiPm3AX') },
+      { key: 'C', letter: 'C', name: '클레이크림', desc: '트렌디한 느낌에다 과하지 않은 유럽 미장 감성', image: gdrive('1c2VkddxELnjZYJGiYH1GfdLN4pSOSNho') },
+      { key: 'D', letter: 'D', name: '테네시오크', desc: '집은 따뜻한 우드가 들어가야 제맛이지', image: gdrive('165aEh_DWn9_KvApqlaz9k8XV5kqvKmf0') },
+      { key: 'E', letter: 'E', name: '베르겐오크', desc: '짙은 색으로 딱! 포인트를 주겠어', image: gdrive('1GnSSWdt6cbsA1MxocXkoMywJEp9x_ZKq') },
+    ]
+  },
+  {
+    id: 'film',
+    step: 'Step 03',
+    title: '필름재 코너에 도착했어요.\n어떤 스타일로 연출하고 싶으세요?',
+    sub: '필름재 방향을 선택해주세요',
+    gridClass: 'cols-single',
+    options: [
+      { key: 'A', letter: 'A', name: '가구재와 같은 컬러로', desc: '통일감 있게, 정돈된 공간을 만들고 싶어요', image: gdrive('1dP70pIPoh_Yav5MI6kzKJ6oRz9PE6gGd') },
+      { key: 'B', letter: 'B', name: '다른 컬러로 개성있게', desc: '포인트를 주어 나만의 감각을 표현하고 싶어요', image: gdrive('17FnRpQEwMH38nn5h0ToqPgoqtD33bbrs') },
+    ]
+  },
+  {
+    id: 'wall',
+    step: 'Step 04',
+    title: '마지막으로 벽장재예요.\n어떤 벽장재가 내 공간에 어울릴까요?',
+    sub: '벽장재를 선택해주세요',
+    gridClass: 'cols-2',
+    options: [
+      { key: 'A', letter: 'A', name: '무이네화이트', desc: '깔끔한 화이트톤으로 가자!', image: gdrive('1o5CWlb3BJ9a_yHaOf9nue-hWvtZTrJla') },
+      { key: 'B', letter: 'B', name: '테네시딥브라운', desc: '고급스러운 분위기를 잡아줘야지', image: gdrive('1BBczPSPDV1F1e3rFpUA3nP66PaHnntAB') },
+      { key: 'C', letter: 'C', name: '트라버틴밀크', desc: '요즘은 트라버틴이 대세래', image: gdrive('1lRxgXcLmD4Dstlwr1vGBLM_Lg_BUtBlW') },
+      { key: 'D', letter: 'D', name: '베일그레이', desc: '이거 진짜 타일같긴 하더라', image: gdrive('1qA82_1F3oPGPffdxBlojHR80L0YlHjAH') },
+    ]
+  }
+];
+
+// ── MAPPING TABLE (120가지 → 24개 세라믹) ──
+const MAPPING = {
+  // 바닥재A + 가구재A
+  'A-A-A-A': { ceramic:'니라미스트', en:'Nyra Mist', line:'아틀라스콩코드', type:'모던그레이' },
+  'A-A-A-B': { ceramic:'발레그레이', en:'Valais Grey', line:'세라믹', type:'다크럭셔리' },
+  'A-A-A-C': { ceramic:'트라버티노로마노샌드', en:'Travertino Romano Sand', line:'아틀라스콩코드', type:'트렌디내추럴' },
+  'A-A-A-D': { ceramic:'루카그레이', en:'Luca Grey', line:'세라믹', type:'모던그레이' },
+  'A-A-B-A': { ceramic:'알펜그레이', en:'Alpen Grey', line:'세라믹', type:'모던그레이' },
+  'A-A-B-B': { ceramic:'페일블랙', en:'Pale Black', line:'세라믹', type:'다크럭셔리' },
+  'A-A-B-C': { ceramic:'니라엠브로시아', en:'Nyra Ambrosia', line:'아틀라스콩코드', type:'웜내추럴' },
+  'A-A-B-D': { ceramic:'그레이스톤', en:'Grey Stone', line:'아틀라스콩코드', type:'어반스톤' },
+  // 바닥재A + 가구재B
+  'A-B-A-A': { ceramic:'트라버티노화이트', en:'Travertino White', line:'아틀라스콩코드', type:'미니멀화이트' },
+  'A-B-A-B': { ceramic:'칼라카타베르니니', en:'Calacatta Bernini', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'A-B-A-C': { ceramic:'트라버틴파우더', en:'Travertine Powder', line:'세라믹', type:'미니멀화이트' },
+  'A-B-A-D': { ceramic:'니라미스트', en:'Nyra Mist', line:'아틀라스콩코드', type:'모던그레이' },
+  'A-B-B-A': { ceramic:'비안코스타투아리오(무광)', en:'Bianco Statuario Matt', line:'세라믹', type:'미니멀화이트' },
+  'A-B-B-B': { ceramic:'칼라카타임페리얼', en:'Calacatta Imperial', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'A-B-B-C': { ceramic:'알펜크림', en:'Alpen Cream', line:'세라믹', type:'트렌디내추럴' },
+  'A-B-B-D': { ceramic:'비안코스타투아리오(유광)', en:'Bianco Statuario Gloss', line:'세라믹', type:'어반스톤' },
+  // 바닥재A + 가구재C
+  'A-C-A-A': { ceramic:'알펜크림', en:'Alpen Cream', line:'세라믹', type:'트렌디내추럴' },
+  'A-C-A-B': { ceramic:'페일베이지', en:'Pale Beige', line:'세라믹', type:'웜내추럴' },
+  'A-C-A-C': { ceramic:'트라버티노로마노샌드', en:'Travertino Romano Sand', line:'아틀라스콩코드', type:'트렌디내추럴' },
+  'A-C-A-D': { ceramic:'라임베이지', en:'Lime Beige', line:'세라믹', type:'트렌디내추럴' },
+  'A-C-B-A': { ceramic:'트라버틴파우더', en:'Travertine Powder', line:'세라믹', type:'미니멀화이트' },
+  'A-C-B-B': { ceramic:'칼라카타엑스트라', en:'Calacatta Extra', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'A-C-B-C': { ceramic:'알레스카화이트', en:'Alaska White', line:'세라믹', type:'웜내추럴' },
+  'A-C-B-D': { ceramic:'알피너스', en:'Alpinus', line:'아틀라스콩코드', type:'어반스톤' },
+  // 바닥재A + 가구재D
+  'A-D-A-A': { ceramic:'니라헤이', en:'Nyra Hay', line:'아틀라스콩코드', type:'내추럴우드' },
+  'A-D-A-B': { ceramic:'타지마할', en:'Taj Mahal', line:'아틀라스콩코드', type:'내추럴우드' },
+  'A-D-A-C': { ceramic:'트라버틴오트', en:'Travertine Oat', line:'세라믹', type:'내추럴우드' },
+  'A-D-A-D': { ceramic:'니라엠브로시아', en:'Nyra Ambrosia', line:'아틀라스콩코드', type:'웜내추럴' },
+  'A-D-B-A': { ceramic:'페일베이지', en:'Pale Beige', line:'세라믹', type:'웜내추럴' },
+  'A-D-B-B': { ceramic:'칼라카타블랙', en:'Calacatta Black', line:'아틀라스콩코드', type:'다크럭셔리' },
+  'A-D-B-C': { ceramic:'라임베이지', en:'Lime Beige', line:'세라믹', type:'트렌디내추럴' },
+  'A-D-B-D': { ceramic:'그레이스톤', en:'Grey Stone', line:'아틀라스콩코드', type:'어반스톤' },
+  // 바닥재A + 가구재E
+  'A-E-A-A': { ceramic:'발레그레이', en:'Valais Grey', line:'세라믹', type:'다크럭셔리' },
+  'A-E-A-B': { ceramic:'칼라카타블랙', en:'Calacatta Black', line:'아틀라스콩코드', type:'다크럭셔리' },
+  'A-E-A-C': { ceramic:'알레스카화이트', en:'Alaska White', line:'세라믹', type:'웜내추럴' },
+  'A-E-A-D': { ceramic:'알피너스', en:'Alpinus', line:'아틀라스콩코드', type:'어반스톤' },
+  'A-E-B-A': { ceramic:'칼라카타베르니니', en:'Calacatta Bernini', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'A-E-B-B': { ceramic:'페일블랙', en:'Pale Black', line:'세라믹', type:'다크럭셔리' },
+  'A-E-B-C': { ceramic:'비안코스타투아리오(유광)', en:'Bianco Statuario Gloss', line:'세라믹', type:'어반스톤' },
+  'A-E-B-D': { ceramic:'그레이스톤', en:'Grey Stone', line:'아틀라스콩코드', type:'어반스톤' },
+  // 바닥재B + 가구재A
+  'B-A-A-A': { ceramic:'알펜그레이', en:'Alpen Grey', line:'세라믹', type:'모던그레이' },
+  'B-A-A-B': { ceramic:'발레그레이', en:'Valais Grey', line:'세라믹', type:'다크럭셔리' },
+  'B-A-A-C': { ceramic:'라임베이지', en:'Lime Beige', line:'세라믹', type:'트렌디내추럴' },
+  'B-A-A-D': { ceramic:'루카그레이', en:'Luca Grey', line:'세라믹', type:'모던그레이' },
+  'B-A-B-A': { ceramic:'비안코스타투아리오(무광)', en:'Bianco Statuario Matt', line:'세라믹', type:'미니멀화이트' },
+  'B-A-B-B': { ceramic:'페일블랙', en:'Pale Black', line:'세라믹', type:'다크럭셔리' },
+  'B-A-B-C': { ceramic:'트라버티노로마노샌드', en:'Travertino Romano Sand', line:'아틀라스콩코드', type:'트렌디내추럴' },
+  'B-A-B-D': { ceramic:'그레이스톤', en:'Grey Stone', line:'아틀라스콩코드', type:'어반스톤' },
+  // 바닥재B + 가구재B
+  'B-B-A-A': { ceramic:'트라버티노화이트', en:'Travertino White', line:'아틀라스콩코드', type:'미니멀화이트' },
+  'B-B-A-B': { ceramic:'칼라카타임페리얼', en:'Calacatta Imperial', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'B-B-A-C': { ceramic:'알펜크림', en:'Alpen Cream', line:'세라믹', type:'트렌디내추럴' },
+  'B-B-A-D': { ceramic:'니라미스트', en:'Nyra Mist', line:'아틀라스콩코드', type:'모던그레이' },
+  'B-B-B-A': { ceramic:'칼라카타베르니니', en:'Calacatta Bernini', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'B-B-B-B': { ceramic:'칼라카타엑스트라', en:'Calacatta Extra', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'B-B-B-C': { ceramic:'트라버틴파우더', en:'Travertine Powder', line:'세라믹', type:'미니멀화이트' },
+  'B-B-B-D': { ceramic:'비안코스타투아리오(유광)', en:'Bianco Statuario Gloss', line:'세라믹', type:'어반스톤' },
+  // 바닥재B + 가구재C
+  'B-C-A-A': { ceramic:'트라버티노로마노샌드', en:'Travertino Romano Sand', line:'아틀라스콩코드', type:'트렌디내추럴' },
+  'B-C-A-B': { ceramic:'니라엠브로시아', en:'Nyra Ambrosia', line:'아틀라스콩코드', type:'웜내추럴' },
+  'B-C-A-C': { ceramic:'알펜크림', en:'Alpen Cream', line:'세라믹', type:'트렌디내추럴' },
+  'B-C-A-D': { ceramic:'라임베이지', en:'Lime Beige', line:'세라믹', type:'트렌디내추럴' },
+  'B-C-B-A': { ceramic:'비안코스타투아리오(무광)', en:'Bianco Statuario Matt', line:'세라믹', type:'미니멀화이트' },
+  'B-C-B-B': { ceramic:'페일베이지', en:'Pale Beige', line:'세라믹', type:'웜내추럴' },
+  'B-C-B-C': { ceramic:'알레스카화이트', en:'Alaska White', line:'세라믹', type:'웜내추럴' },
+  'B-C-B-D': { ceramic:'알피너스', en:'Alpinus', line:'아틀라스콩코드', type:'어반스톤' },
+  // 바닥재B + 가구재D
+  'B-D-A-A': { ceramic:'페일베이지', en:'Pale Beige', line:'세라믹', type:'웜내추럴' },
+  'B-D-A-B': { ceramic:'타지마할', en:'Taj Mahal', line:'아틀라스콩코드', type:'내추럴우드' },
+  'B-D-A-C': { ceramic:'트라버틴오트', en:'Travertine Oat', line:'세라믹', type:'내추럴우드' },
+  'B-D-A-D': { ceramic:'루카그레이', en:'Luca Grey', line:'세라믹', type:'모던그레이' },
+  'B-D-B-A': { ceramic:'니라헤이', en:'Nyra Hay', line:'아틀라스콩코드', type:'내추럴우드' },
+  'B-D-B-B': { ceramic:'칼라카타블랙', en:'Calacatta Black', line:'아틀라스콩코드', type:'다크럭셔리' },
+  'B-D-B-C': { ceramic:'니라엠브로시아', en:'Nyra Ambrosia', line:'아틀라스콩코드', type:'웜내추럴' },
+  'B-D-B-D': { ceramic:'그레이스톤', en:'Grey Stone', line:'아틀라스콩코드', type:'어반스톤' },
+  // 바닥재B + 가구재E
+  'B-E-A-A': { ceramic:'발레그레이', en:'Valais Grey', line:'세라믹', type:'다크럭셔리' },
+  'B-E-A-B': { ceramic:'칼라카타블랙', en:'Calacatta Black', line:'아틀라스콩코드', type:'다크럭셔리' },
+  'B-E-A-C': { ceramic:'알피너스', en:'Alpinus', line:'아틀라스콩코드', type:'어반스톤' },
+  'B-E-A-D': { ceramic:'그레이스톤', en:'Grey Stone', line:'아틀라스콩코드', type:'어반스톤' },
+  'B-E-B-A': { ceramic:'칼라카타베르니니', en:'Calacatta Bernini', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'B-E-B-B': { ceramic:'페일블랙', en:'Pale Black', line:'세라믹', type:'다크럭셔리' },
+  'B-E-B-C': { ceramic:'알레스카화이트', en:'Alaska White', line:'세라믹', type:'웜내추럴' },
+  'B-E-B-D': { ceramic:'발레그레이', en:'Valais Grey', line:'세라믹', type:'다크럭셔리' },
+  // 바닥재C + 가구재A
+  'C-A-A-A': { ceramic:'트라버티노화이트', en:'Travertino White', line:'아틀라스콩코드', type:'미니멀화이트' },
+  'C-A-A-B': { ceramic:'니라미스트', en:'Nyra Mist', line:'아틀라스콩코드', type:'모던그레이' },
+  'C-A-A-C': { ceramic:'알펜크림', en:'Alpen Cream', line:'세라믹', type:'트렌디내추럴' },
+  'C-A-A-D': { ceramic:'알펜그레이', en:'Alpen Grey', line:'세라믹', type:'모던그레이' },
+  'C-A-B-A': { ceramic:'비안코스타투아리오(무광)', en:'Bianco Statuario Matt', line:'세라믹', type:'미니멀화이트' },
+  'C-A-B-B': { ceramic:'페일블랙', en:'Pale Black', line:'세라믹', type:'다크럭셔리' },
+  'C-A-B-C': { ceramic:'트라버티노로마노샌드', en:'Travertino Romano Sand', line:'아틀라스콩코드', type:'트렌디내추럴' },
+  'C-A-B-D': { ceramic:'루카그레이', en:'Luca Grey', line:'세라믹', type:'모던그레이' },
+  // 바닥재C + 가구재B
+  'C-B-A-A': { ceramic:'비안코스타투아리오(무광)', en:'Bianco Statuario Matt', line:'세라믹', type:'미니멀화이트' },
+  'C-B-A-B': { ceramic:'칼라카타베르니니', en:'Calacatta Bernini', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'C-B-A-C': { ceramic:'트라버틴파우더', en:'Travertine Powder', line:'세라믹', type:'미니멀화이트' },
+  'C-B-A-D': { ceramic:'트라버티노화이트', en:'Travertino White', line:'아틀라스콩코드', type:'미니멀화이트' },
+  'C-B-B-A': { ceramic:'칼라카타엑스트라', en:'Calacatta Extra', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'C-B-B-B': { ceramic:'칼라카타임페리얼', en:'Calacatta Imperial', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'C-B-B-C': { ceramic:'라임베이지', en:'Lime Beige', line:'세라믹', type:'트렌디내추럴' },
+  'C-B-B-D': { ceramic:'비안코스타투아리오(유광)', en:'Bianco Statuario Gloss', line:'세라믹', type:'어반스톤' },
+  // 바닥재C + 가구재C
+  'C-C-A-A': { ceramic:'알펜크림', en:'Alpen Cream', line:'세라믹', type:'트렌디내추럴' },
+  'C-C-A-B': { ceramic:'페일베이지', en:'Pale Beige', line:'세라믹', type:'웜내추럴' },
+  'C-C-A-C': { ceramic:'트라버티노로마노샌드', en:'Travertino Romano Sand', line:'아틀라스콩코드', type:'트렌디내추럴' },
+  'C-C-A-D': { ceramic:'라임베이지', en:'Lime Beige', line:'세라믹', type:'트렌디내추럴' },
+  'C-C-B-A': { ceramic:'트라버틴파우더', en:'Travertine Powder', line:'세라믹', type:'미니멀화이트' },
+  'C-C-B-B': { ceramic:'칼라카타엑스트라', en:'Calacatta Extra', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'C-C-B-C': { ceramic:'알레스카화이트', en:'Alaska White', line:'세라믹', type:'웜내추럴' },
+  'C-C-B-D': { ceramic:'알피너스', en:'Alpinus', line:'아틀라스콩코드', type:'어반스톤' },
+  // 바닥재C + 가구재D
+  'C-D-A-A': { ceramic:'니라헤이', en:'Nyra Hay', line:'아틀라스콩코드', type:'내추럴우드' },
+  'C-D-A-B': { ceramic:'타지마할', en:'Taj Mahal', line:'아틀라스콩코드', type:'내추럴우드' },
+  'C-D-A-C': { ceramic:'니라엠브로시아', en:'Nyra Ambrosia', line:'아틀라스콩코드', type:'웜내추럴' },
+  'C-D-A-D': { ceramic:'페일베이지', en:'Pale Beige', line:'세라믹', type:'웜내추럴' },
+  'C-D-B-A': { ceramic:'트라버틴오트', en:'Travertine Oat', line:'세라믹', type:'내추럴우드' },
+  'C-D-B-B': { ceramic:'칼라카타블랙', en:'Calacatta Black', line:'아틀라스콩코드', type:'다크럭셔리' },
+  'C-D-B-C': { ceramic:'알펜크림', en:'Alpen Cream', line:'세라믹', type:'트렌디내추럴' },
+  'C-D-B-D': { ceramic:'루카그레이', en:'Luca Grey', line:'세라믹', type:'모던그레이' },
+  // 바닥재C + 가구재E
+  'C-E-A-A': { ceramic:'발레그레이', en:'Valais Grey', line:'세라믹', type:'다크럭셔리' },
+  'C-E-A-B': { ceramic:'칼라카타블랙', en:'Calacatta Black', line:'아틀라스콩코드', type:'다크럭셔리' },
+  'C-E-A-C': { ceramic:'알레스카화이트', en:'Alaska White', line:'세라믹', type:'웜내추럴' },
+  'C-E-A-D': { ceramic:'그레이스톤', en:'Grey Stone', line:'아틀라스콩코드', type:'어반스톤' },
+  'C-E-B-A': { ceramic:'칼라카타베르니니', en:'Calacatta Bernini', line:'아틀라스콩코드', type:'럭셔리마블' },
+  'C-E-B-B': { ceramic:'페일블랙', en:'Pale Black', line:'세라믹', type:'다크럭셔리' },
+  'C-E-B-C': { ceramic:'알피너스', en:'Alpinus', line:'아틀라스콩코드', type:'어반스톤' },
+  'C-E-B-D': { ceramic:'비안코스타투아리오(유광)', en:'Bianco Statuario Gloss', line:'세라믹', type:'어반스톤' },
+};
+
+// ── CERAMIC IMAGE MAP ──
+const CERAMIC_IMAGES = {
+  '트라버티노화이트':           gdrive('1RWB5cV9-BvJhbE_Tz9G4BM6tjhWV5wut'),
+  '트라버티노로마노샌드':        gdrive('1sOPbtmmtb8jI6_a0nPGq6hNB50FxHYJl'),
+  '타지마할':                   gdrive('1iaJ03-f-Eag5vkOtMgf91Gi4KNuvAAJf'),
+  '니라헤이':                   gdrive('1VADAELO1R9S1QpXwPLWgoKX99w3UllAZ'),
+  '니라미스트':                  gdrive('1BVL0AhE9gdWIqHpQgbUBUnWeC5HVfmic'),
+  '니라엠브로시아':              gdrive('1apvvgxKSyr-8yukhrW5PnG499Wno4RaR'),
+  '칼라카타엑스트라':            gdrive('18-aU1SS4lB5csVWKVHCY4nlor813sPAz'),
+  '칼라카타임페리얼':            gdrive('1NH8mFAKXwNfIUFwnvQ-cyWkheXjUI0Sf'),
+  '칼라카타베르니니':            gdrive('1hmbMX13j8iB4f2r5TNCptE4nmeNTqLap'),
+  '알피너스':                   gdrive('1jZANnZUfJxlJ-TZmSgvSwDF5IUdxzUQw'),
+  '그레이스톤':                  gdrive('1d5bTKMCh3MpmPtV2nLDP9GFuSUF9tqD4'),
+  '칼라카타블랙':               gdrive('1iYugW3YmkRMGwHQMiVE4pqW4ReE9Ea_L'),
+  '트라버틴파우더':              gdrive('15VUh5hHpzUn0buEfuSA21HNupFnJA3n0'),
+  '트라버틴오트':               gdrive('13yHYQUhYpdevBHKQ-jZMZxjhHcI0mT6Y'),
+  '비안코스타투아리오(무광)':    gdrive('1-068Arf7trveWLlxUPr9aMmhg3grNlAz'),
+  '비안코스타투아리오(유광)':    gdrive('1HTVqhzrnFVlqnNPfE0tSJMeOBgvVh4EO'),
+  '라임베이지':                  gdrive('19h_FS7bNQGt9oPm_AYRxNSU1WE2y6041'),
+  '페일베이지':                  gdrive('120gcmtt3lat0HDogk6-3ahFLnQyw2eHk'),
+  '루카그레이':                  gdrive('1--O7XRiGgzBrWD1DDoRT9Qiy6S1-V5T3'),
+  '알펜크림':                   gdrive('1vOws_XGOZ-I_B46rnTHFm_d5QkAhuCV8'),
+  '알펜그레이':                  gdrive('1pSScacQQuELx5lLbr7JeUNSHcHPnCqS3'),
+  '발레그레이':                  gdrive('1-hFKdmo8bqzMb4xhCmHIZz5LWa7G90xE'),
+  '페일블랙':                   gdrive('1XuiA1-LKyk5VBeDaW_ahi11cr6C_IM4_'),
+  '알레스카화이트':              gdrive('1Fqla9WLjfl0RLjEI-JBydD8L20Hgy1We'),
+};
+
+
+const TYPE_DATA = {
+  '미니멀화이트': {
+    emoji: '🤍',
+    label: 'Minimal White',
+    title: '당신은 군더더기 없는 공간을 사랑하는군요.',
+    desc: '깨끗하고 정돈된 것에서 아름다움을 찾는 분이에요. 과하지 않고, 비워낼수록 오히려 가득 차 보이는 공간을 꿈꾸죠. 흰빛이 주는 고요한 충만함을 아는 당신, 빛이 들어오는 각도마저 인테리어의 일부로 만드는 감각을 갖고 있어요.',
+  },
+  '내추럴우드': {
+    emoji: '🪵',
+    label: 'Natural Wood',
+    title: '당신은 따뜻한 온기가 흐르는 공간을 원하는군요.',
+    desc: '집은 쉬는 곳이라고 생각하는 분이에요. 자연에서 온 소재들이 주는 편안함을 직감적으로 알고, 시간이 지날수록 더 멋스러워지는 것들에 마음이 가죠. 우드의 결이 있는 공간에서 비로소 긴장이 풀리는 당신, 집에서 진짜 쉬는 법을 아는 사람이에요.',
+  },
+  '모던그레이': {
+    emoji: '🩶',
+    label: 'Modern Grey',
+    title: '당신은 세련된 절제미를 추구하는군요.',
+    desc: '유행을 따르되 흔들리지 않는 취향을 가진 분이에요. 그레이 계열이 주는 도시적 무게감과 안정감을 즐기고, 튀지 않으면서도 분명히 다른 존재감을 원하죠. 오래 봐도 질리지 않는 공간, 10년 후에도 세련되어 보일 선택을 본능적으로 하는 분이에요.',
+  },
+  '트렌디내추럴': {
+    emoji: '🫧',
+    label: 'Trendy Natural',
+    title: '당신은 감각적인 트렌드를 자연스럽게 소화하는군요.',
+    desc: '지금 무엇이 세련된지 정확히 알고, 그것을 과하지 않게 녹여내는 능력이 있는 분이에요. 유럽 감성의 크림톤과 내추럴한 소재의 조화를 즐기고, 개성 있지만 편안한 공간을 완성하는 감각을 갖고 있죠. 인테리어 잡지에서 바로 나온 듯한 공간이 당신의 목표예요.',
+  },
+  '다크럭셔리': {
+    emoji: '🖤',
+    label: 'Dark Luxury',
+    title: '당신은 강렬하고 고급스러운 공간을 원하는군요.',
+    desc: '밝고 가벼운 것보다 묵직하고 깊은 분위기에 끌리는 분이에요. 어두운 톤이 주는 포인트와 고급스러움을 두려워하지 않고, 오히려 그 속에서 공간의 진짜 개성이 드러난다고 느끼죠. 선택 하나하나에 확신이 있고, 타협하지 않는 취향을 가진 분이에요.',
+  },
+  '럭셔리마블': {
+    emoji: '✨',
+    label: 'Luxury Marble',
+    title: '당신은 클래식한 럭셔리를 꿈꾸는군요.',
+    desc: '시간이 지나도 변하지 않는 아름다움을 아는 분이에요. 대리석 패턴이 주는 웅장함과 우아함에서 공간의 품격을 느끼고, 화려하지만 과하지 않은 절묘한 균형을 추구하죠. 공간에 들어오는 순간 "아" 하는 감탄사가 나오는 인테리어, 그게 당신의 목표예요.',
+  },
+  '웜내추럴': {
+    emoji: '🌿',
+    label: 'Warm Natural',
+    title: '당신은 포근하고 자연스러운 분위기를 원하는군요.',
+    desc: '억지스럽지 않고 자연스럽게 완성되는 공간을 좋아하는 분이에요. 베이지와 크림의 따뜻한 톤에서 편안함을 느끼고, 조금 투박해도 온기가 있는 소재에 마음이 가죠. 집에 들어오는 순간 포근하게 감싸이는 느낌, 그 따뜻함이 당신이 원하는 공간이에요.',
+  },
+  '어반스톤': {
+    emoji: '🪨',
+    label: 'Urban Stone',
+    title: '당신은 개성 있는 스톤 감성을 원하는군요.',
+    desc: '흔하지 않은 것에 매력을 느끼는 분이에요. 스톤 특유의 불규칙한 패턴과 거친 질감이 오히려 세련되어 보인다는 것을 알고, 남들과 다른 선택을 두려워하지 않죠. 도시적이면서도 날 것의 감각이 공존하는 공간, 그것이 당신만의 인테리어 언어예요.',
+  },
+};
+
+// ── CERAMIC DESCRIPTIONS ──
+const CERAMIC_DATA = {
+  '트라버티노화이트': {
+    tags: ['트라버틴 패턴', '밝은 베이지', '선형 결'],
+    desc: '이탈리아 고급 대리석 특유의 선형 결이 세련되게 표현된 세라믹이에요. 균일하지 않은 자연스러운 줄무늬가 공간에 깊이를 더하면서도, 전체적으로 밝고 따뜻한 베이지 베이스가 부담 없이 어우러져요. 욕실 벽면에 전면 시공하거나 주방 아일랜드 측면에 포인트로 사용하면, 유럽 고급 리조트에 온 것 같은 분위기가 자연스럽게 연출돼요.',
+  },
+  '트라버티노로마노샌드': {
+    tags: ['트라버틴 패턴', '샌드 베이지', '자연석 결'],
+    desc: '따뜻한 샌드 톤 위에 트라버틴 특유의 불규칙한 자연석 패턴이 담겨 있어요. 화이트보다 한 톤 깊은 베이지가 공간 전체에 온기를 더하고, 세라믹 특유의 깔끔한 마감이 자연소재의 감성을 세련되게 정제해줘요. 거실 포인트 벽이나 드레스룸 전체 벽면에 시공하면 럭셔리 호텔 스위트룸 같은 분위기가 완성돼요.',
+  },
+  '타지마할': {
+    tags: ['내추럴 결', '아이보리 베이지', '우드 무드'],
+    desc: '대리석이지만 우드처럼 따뜻한 결이 느껴지는 독특한 세라믹이에요. 아이보리와 베이지가 섞인 은은한 배경 위로 자연스러운 선형 패턴이 흐르면서, 차갑지 않고 포근한 석재 감성을 만들어내요. 우드 바닥재와 함께 사용하면 자연 소재끼리의 조화가 완벽하게 맞아떨어지고, 욕실 전체에 시공하면 스파 리조트 같은 힐링 공간이 탄생해요.',
+  },
+  '니라헤이': {
+    tags: ['스톤 패턴', '웜 베이지', '자연석 느낌'],
+    desc: '따뜻한 헤이 컬러의 자연석 패턴이 담긴 세라믹이에요. 불규칙하게 분포된 미세한 입자감이 천연 석재처럼 보이면서도, 세라믹 특유의 균일한 마감이 시공 후 관리의 편리함을 보장해요. 우드 가구와 함께 배치하면 자연주의 인테리어의 정석을 완성할 수 있고, 현관 바닥이나 욕실 벽에 시공하면 집 전체의 톤을 따뜻하게 이끌어줘요.',
+  },
+  '니라미스트': {
+    tags: ['스톤 패턴', '쿨 그레이', '미스트 톤'],
+    desc: '차분한 미스트 그레이 위에 자연석의 은은한 패턴이 퍼져있는 세라믹이에요. 너무 차갑지도, 너무 따뜻하지도 않은 중립적인 그레이 톤이 어떤 컬러와도 잘 어우러지고, 공간을 실제보다 넓고 시원하게 보이게 해줘요. 그레이 계열 가구와 코디하면 도시적인 세련미가 극대화되고, 욕실 전체에 통일감 있게 시공하면 호텔 스타일의 완성도 높은 공간이 만들어져요.',
+  },
+  '니라엠브로시아': {
+    tags: ['스톤 패턴', '웜 그레이베이지', '클래식'],
+    desc: '그레이와 베이지 사이의 절묘한 중간 톤을 가진 클래식한 스톤 세라믹이에요. 엠브로시아 특유의 섬세한 석재 패턴이 공간에 클래식한 품격을 더하면서도, 과하지 않은 색감이 장기적으로도 질리지 않는 내구성 있는 취향임을 증명해요. 중성적인 톤 덕분에 다크 우드부터 화이트 가구까지 어떤 조합과도 조화롭고, 거실 포인트 벽으로 활용하면 공간의 레벨이 한층 올라가요.',
+  },
+  '칼라카타엑스트라': {
+    tags: ['칼라카타 마블', '화이트 베이스', '그레이 벤'],
+    desc: '이탈리아 최고급 대리석 칼라카타를 그대로 옮겨온 듯한 세라믹이에요. 순백에 가까운 화이트 베이스 위로 날카롭고 선명한 그레이 벤이 대담하게 뻗어있어, 화려하지만 절제된 럭셔리함을 완성해요. 욕실 메인 벽면에 대형으로 시공하거나 주방 백스플래시로 사용하면, 인테리어 잡지에서 바로 나온 것 같은 완성도 높은 공간이 탄생해요.',
+  },
+  '칼라카타임페리얼': {
+    tags: ['칼라카타 마블', '골드 벤', '임페리얼 감성'],
+    desc: '칼라카타 라인 중에서도 골드빛 벤이 더해진 가장 화려한 버전이에요. 흰 바탕 위로 그레이와 골드가 함께 흐르면서 제왕적인 분위기를 연출하는데, 그럼에도 세라믹 특유의 깔끔한 표면이 과하지 않게 조절해줘요. 파우더룸 전체를 이 타일로 감싸거나, 드레스룸의 포인트 벽으로 활용하면 럭셔리 브랜드 쇼룸 같은 특별한 공간이 완성돼요.',
+  },
+  '칼라카타베르니니': {
+    tags: ['칼라카타 마블', '다이나믹 벤', '대담한 패턴'],
+    desc: '칼라카타 중에서도 벤의 흐름이 가장 드라마틱한 세라믹이에요. 화이트 베이스 위로 굵고 대담하게 흐르는 그레이 패턴이 공간에 강렬한 인상을 남기면서, 하나의 예술 작품처럼 벽면을 채워줘요. 욕실 메인 벽에 전면 시공하거나 거실 TV 뒤 포인트 벽으로 사용하면, 들어오는 순간 시선이 집중되는 공간이 완성돼요.',
+  },
+  '알피너스': {
+    tags: ['불규칙 스톤', '크리미 베이지', '거친 질감'],
+    desc: '알프스의 거친 암석에서 영감을 받은 독창적인 스톤 패턴의 세라믹이에요. 크리미 베이지 베이스 위로 불규칙하게 분포된 다크 스팟들이 자연의 날 것 그대로의 아름다움을 담아내고, 어디에도 없는 개성 있는 표정을 만들어내요. 현관 바닥 전체에 시공하거나 야외 테라스에 활용하면 공간의 첫인상부터 강렬하게 각인되는 효과를 얻을 수 있어요.',
+  },
+  '그레이스톤': {
+    tags: ['다크 그레이', '스톤 텍스처', '모던 어반'],
+    desc: '도시의 콘크리트와 자연석의 감성이 만나는 세라믹이에요. 깊은 다크 그레이 베이스에 스톤 특유의 미세한 텍스처가 더해져, 차갑지만 감각적인 어반 무드를 완성해요. 주방 아일랜드 측면이나 욕실 바닥에 시공하면 공간 전체의 무게감이 확 올라가고, 화이트 계열 상부장이나 가구와 대비시키면 흑백의 극적인 긴장감이 연출돼요.',
+  },
+  '칼라카타블랙': {
+    tags: ['다크 마블', '화이트 벤', '드라마틱'],
+    desc: '칼라카타의 DNA를 블랙으로 반전시킨 가장 드라마틱한 세라믹이에요. 깊은 블랙 베이스 위로 선명한 화이트 벤이 번개처럼 뻗어있어, 시각적 충격과 함께 잊을 수 없는 강렬함을 선사해요. 욕실 한 면을 통으로 시공하거나 드레스룸의 메인 벽으로 사용하면, 고급 나이트 클럽이나 하이엔드 스파를 연상시키는 완전히 다른 차원의 공간이 탄생해요.',
+  },
+  '트라버틴파우더': {
+    tags: ['트라버틴 패턴', '라이트 그레이', '파우더 톤'],
+    desc: '파우더처럼 부드러운 라이트 그레이 톤의 트라버틴 패턴 세라믹이에요. 트라버티노화이트보다 한 톤 쿨한 베이스가 현대적인 느낌을 주면서도, 트라버틴 특유의 자연스러운 선형 결이 딱딱하지 않게 중화해줘요. 화이트와 그레이 사이를 오가는 이 절묘한 톤은 공간을 실제보다 환하고 넓어 보이게 만드는 효과가 있어, 좁은 욕실이나 현관에 특히 추천해요.',
+  },
+  '트라버틴오트': {
+    tags: ['트라버틴 패턴', '오트밀 베이지', '따뜻한 결'],
+    desc: '오트밀처럼 포근한 베이지 톤의 트라버틴 패턴 세라믹이에요. 따뜻하고 부드러운 색감이 공간 전체에 온기를 불어넣고, 트라버틴의 자연스러운 선형 결이 단조로움 없이 시각적 흥미를 더해줘요. 우드 소재와 함께 사용하면 자연 소재 간의 궁합이 완벽하게 맞아떨어지고, 거실 포인트 벽이나 욕실 전체에 시공하면 자연 속에 있는 것 같은 힐링 공간이 완성돼요.',
+  },
+  '비안코스타투아리오(무광)': {
+    tags: ['스타투아리오 마블', '화이트', '무광 마감'],
+    desc: '이탈리아 최상급 스타투아리오 대리석 패턴을 무광으로 표현한 세라믹이에요. 유광 버전과 달리 반사 없이 은은하게 빛이 스며드는 마감이 더욱 고요하고 절제된 럭셔리함을 완성해요. 욕실 메인 벽에 시공하면 차분하고 고급스러운 스파 무드가 연출되고, 대리석 패턴 위로 직접 조명을 비추면 무광 특유의 깊이감이 더욱 극대화돼요.',
+  },
+  '비안코스타투아리오(유광)': {
+    tags: ['스타투아리오 마블', '화이트', '유광 마감'],
+    desc: '이탈리아 최상급 스타투아리오 대리석 패턴을 유광으로 표현한 세라믹이에요. 빛을 받으면 마치 진짜 대리석처럼 반짝이는 표면이 공간에 화사하고 화려한 에너지를 더하고, 청소 후 더욱 빛나는 실용적인 장점도 있어요. 욕실 전체를 이 타일로 통일하면 오성급 호텔 욕실이 그대로 재현되고, 주방 카운터 측면에 세로로 시공하면 공간이 실제보다 훨씬 높아 보이는 효과도 얻을 수 있어요.',
+  },
+  '라임베이지': {
+    tags: ['스톤 패턴', '라이트 베이지', '내추럴 감성'],
+    desc: '밝고 산뜻한 라임 베이지 톤의 내추럴 스톤 패턴 세라믹이에요. 너무 노랗지도 너무 그레이하지도 않은 절묘한 베이지가 공간을 활기차고 생기 있게 만들어주고, 자연스러운 스톤 패턴이 인공적인 느낌 없이 편안하게 어우러져요. 크림 계열 가구와 함께 배치하면 트렌디한 유럽 인테리어 감성이 완성되고, 욕실 전체나 주방 백스플래시로 사용하면 공간이 환하게 살아나요.',
+  },
+  '페일베이지': {
+    tags: ['스톤 패턴', '페일 베이지', '소프트 톤'],
+    desc: '이름처럼 페일하고 부드러운 베이지 톤의 세라믹이에요. 강한 주장 없이 조용히 공간의 배경이 되어주면서, 어떤 가구와 소품을 올려도 잘 받아주는 넉넉한 톤을 가지고 있어요. 특히 우드와 패브릭 소재의 가구들과 함께할 때 빛을 발하고, 자연광이 드는 공간에 시공하면 하루 종일 시시각각 다른 표정을 보여주는 감성적인 공간이 완성돼요.',
+  },
+  '루카그레이': {
+    tags: ['시멘트 스톤', '미디엄 그레이', '도시적'],
+    desc: '시멘트와 스톤의 중간 어딘가에 있는 도시적인 그레이 세라믹이에요. 인더스트리얼 무드와 모던 인테리어의 경계를 자연스럽게 오가는 이 세라믹은, 어떤 공간에 놓여도 세련된 중심을 잡아주는 역할을 해요. 철제 가구나 블랙 프레임의 조명과 함께 사용하면 현대적인 도시 감성이 극대화되고, 욕실 바닥에 사용하면 공간이 한층 안정적이고 묵직하게 완성돼요.',
+  },
+  '알펜크림': {
+    tags: ['미장 스톤', '크리미 화이트', '유럽 감성'],
+    desc: '유럽 미장 벽 느낌을 세라믹으로 완벽하게 구현한 제품이에요. 크리미 화이트 베이스에 미세한 질감이 더해져, 손으로 직접 바른 것 같은 따뜻하고 아날로그적인 감성을 세라믹의 실용성과 함께 제공해요. 클레이 계열 가구나 라탄 소품과 함께 배치하면 지중해 감성의 내추럴 인테리어가 완성되고, 벽면 전체에 시공하면 공간이 한층 아늑하고 포근해지는 효과가 있어요.',
+  },
+  '알펜그레이': {
+    tags: ['미장 스톤', '쿨 그레이', '유럽 감성'],
+    desc: '알펜크림의 미장 감성을 쿨 그레이로 표현한 세라믹이에요. 따뜻한 크림 대신 차분한 그레이 베이스가 현대적이고 세련된 분위기를 만들어내고, 미세한 질감이 반복되는 패턴 없이도 풍부한 시각적 깊이를 제공해요. 도시적인 모노톤 인테리어에 완벽하게 녹아들고, 블랙 라인 하드웨어나 무광 철제 조명과 함께 사용하면 감각적인 모던 스칸디나비안 무드가 완성돼요.',
+  },
+  '발레그레이': {
+    tags: ['다크 스톤', '딥 그레이', '중후한 감성'],
+    desc: '밸리처럼 깊고 차분한 딥 그레이 스톤 세라믹이에요. 단순한 그레이가 아니라 자연석의 풍부한 레이어가 느껴지는 이 색감은, 보는 각도와 조명에 따라 다른 표정을 보여주며 공간에 깊이를 더해요. 화이트 상부장이나 크림 계열 패브릭과 대비시키면 명도 차이로 인한 극적인 인테리어 효과를 얻을 수 있고, 욕실 하부 벽이나 주방 아일랜드 측면에 시공하면 공간의 무게중심이 자연스럽게 잡혀요.',
+  },
+  '페일블랙': {
+    tags: ['다크 스톤', '차콜 그레이', '모던 다크'],
+    desc: '블랙이라고 하기엔 부드럽고, 그레이라고 하기엔 깊은 차콜 톤의 세라믹이에요. 완전한 블랙보다 사용하기 쉬우면서도, 충분히 다크하고 포인트 있는 분위기를 만들어내요. 스톤 특유의 미세한 패턴이 단조롭지 않게 표면을 채우고, 골드나 브래스 계열 하드웨어와 함께 사용하면 글램 다크 인테리어의 완성도가 극적으로 올라가요.',
+  },
+  '알레스카화이트': {
+    tags: ['알래스카 스톤', '화이트 크림', '스팟 패턴'],
+    desc: '알래스카 자연석을 연상시키는 독특한 스팟 패턴의 세라믹이에요. 화이트와 크림 사이의 베이스 위로 어두운 스팟들이 불규칙하게 분포되어, 눈 속에 박힌 자갈처럼 자연 그대로의 생동감을 담아내요. 자연주의 인테리어를 지향하면서도 너무 흔하지 않은 개성을 원하는 분께 완벽한 선택이고, 현관 바닥이나 욕실 포인트 벽에 시공하면 공간의 첫인상이 완전히 달라지는 경험을 하실 수 있어요.',
+  },
+};
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let currentStep = 0;
+let answers = {}; // { floor, furniture, film, wall }
+const stepKeys = ['floor', 'furniture', 'film', 'wall'];
+
+// ══════════════════════════════════════════
+// FUNCTIONS
+// ══════════════════════════════════════════
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startTest() {
+  currentStep = 0;
+  answers = {};
+  showScreen('screen-question');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[currentStep];
+  const total = QUESTIONS.length;
+  const pct = ((currentStep) / total) * 100;
+
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${currentStep + 1} / ${total}`;
+
+  const body = document.getElementById('question-body');
+  body.innerHTML = '';
+  body.style.animation = 'none';
+  setTimeout(() => { body.style.animation = 'fadeUp 0.5s forwards'; }, 10);
+
+  const titleLines = q.title.split('\n').join('<br>');
+
+  body.innerHTML = `
+    <div class="q-step-label">${q.step}</div>
+    <h2 class="q-title">${titleLines}</h2>
+    <p class="q-sub">${q.sub}</p>
+    <div class="options-grid ${q.gridClass}" id="options-grid"></div>
+    <button class="btn-next" id="btn-next" onclick="nextStep()">다음으로</button>
+  `;
+
+  const grid = document.getElementById('options-grid');
+  q.options.forEach(opt => {
+    const card = document.createElement('div');
+    card.className = 'option-card';
+    card.onclick = () => selectOption(q.id, opt.key, card);
+    card.innerHTML = `
+      ${opt.image 
+        ? `<img class="option-image" src="${opt.image}" alt="${opt.name}" onerror="this.outerHTML='<div class=option-image-placeholder>이미지 준비 중</div>'" />`
+        : `<div class="option-image-placeholder">이미지 준비 중</div>`
+      }
+      <div class="option-letter">${opt.letter}</div>
+      <div class="option-name">${opt.name.replace('\n', '<br>')}</div>
+      <div class="option-desc">${opt.desc}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function selectOption(questionId, key, cardEl) {
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  cardEl.classList.add('selected');
+  answers[questionId] = key;
+  const btn = document.getElementById('btn-next');
+  btn.classList.add('visible');
+
+  // 마지막 질문이면 버튼 텍스트 변경
+  if (currentStep === QUESTIONS.length - 1) {
+    btn.textContent = '결과 확인하기';
+  }
+}
+
+function nextStep() {
+  const q = QUESTIONS[currentStep];
+  if (!answers[q.id]) return;
+
+  currentStep++;
+  if (currentStep < QUESTIONS.length) {
+    renderQuestion();
+  } else {
+    showLoading();
+  }
+}
+
+function showLoading() {
+  showScreen('screen-loading');
+  setTimeout(() => {
+    showResult();
+  }, 2000);
+}
+
+function showResult() {
+  showScreen('screen-result');
+
+  const key = `${answers.floor}-${answers.furniture}-${answers.film}-${answers.wall}`;
+  const result = MAPPING[key];
+
+  if (!result) {
+    document.getElementById('result-body').innerHTML = '<p style="padding:40px;text-align:center;color:#999;">결과를 불러오는 중 오류가 발생했어요.<br>다시 시도해주세요.</p>';
+    return;
+  }
+
+  const typeData = TYPE_DATA[result.type];
+  const ceramicData = CERAMIC_DATA[result.ceramic];
+
+  // 선택 요약
+  const floorOpt = QUESTIONS[0].options.find(o => o.key === answers.floor);
+  const furnOpt = QUESTIONS[1].options.find(o => o.key === answers.furniture);
+  const filmOpt = QUESTIONS[2].options.find(o => o.key === answers.film);
+  const wallOpt = QUESTIONS[3].options.find(o => o.key === answers.wall);
+
+  const tags = ceramicData.tags.map(t => `<span class="result-tag">${t}</span>`).join('');
+
+  document.getElementById('result-body').innerHTML = `
+    <div style="animation: fadeUp 0.6s forwards;">
+      <div class="result-type-badge">${typeData.emoji} ${typeData.label}</div>
+      <h2 class="result-tone-title">${typeData.title}</h2>
+      <p class="result-tone-desc">${typeData.desc}</p>
+
+      <div class="result-ceramic-section">
+        <div class="result-section-label">Your Ceramic</div>
+        <div class="result-ceramic-name">${result.ceramic}</div>
+        <div class="result-ceramic-en">${result.en}</div>
+        <div class="result-ceramic-line">${result.line} Line · Collect Stone</div>
+
+        <img class="result-ceramic-image" src="${CERAMIC_IMAGES[result.ceramic] || ''}" alt="${result.ceramic}" onerror="this.style.display='none'" />
+
+        <div class="result-tags">${tags}</div>
+        <p class="result-desc">${ceramicData.desc}</p>
+      </div>
+
+      <div class="result-selection-summary">
+        <div class="summary-title">나의 선택 요약</div>
+        <div class="summary-items">
+          <div class="summary-item">
+            <strong>바닥재</strong>
+            ${floorOpt.name.replace('\n', ' ')}
+          </div>
+          <div class="summary-item">
+            <strong>가구재</strong>
+            ${furnOpt.name}
+          </div>
+          <div class="summary-item">
+            <strong>필름재</strong>
+            ${filmOpt.name}
+          </div>
+          <div class="summary-item">
+            <strong>벽장재</strong>
+            ${wallOpt.name}
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-retry" onclick="startTest()">다시 테스트하기</button>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
